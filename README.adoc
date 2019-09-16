@@ -1,0 +1,9 @@
+= Import-DLLs : A PowerShell Script
+:author: Oscar Guillermo Castro Jr.
+:revdate: September 16th, 2019
+:source-highlighter: rouge
+:rouge-theme: gruvbox
+
+== Summary
+The PowerShell Module contains the `Import-DLLs` function.
+The function searches the current directory, or the specified directory, for DLL files and attempts to add them to the current PowerShell session through `Add-Type -Path <dll-file-path>`.
