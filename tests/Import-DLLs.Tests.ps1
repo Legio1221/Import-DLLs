@@ -10,7 +10,50 @@
 
     .SYNOPSIS
     ======================================================
-    This script looks through the current directory and 'Add-Type's files with the extension DLL.
-    An optional directory parameter is available. This parameter takes priority!
+    Tests for the Import-DLLs function.
     ======================================================
 #>
+# Import directly from source.
+Import-Module "$PSScriptRoot/../source/Import-DLLs.psd1"
+
+# List of Assemblies in the 'DLLs' folder
+$dllAssemblyNames = @(
+    "Microsoft.Extensions.Configuration.Abstractions",
+    "Microsoft.Extensions.Configuration",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables",
+    "Microsoft.Extensions.Configuration.FileExtensions",
+    "Microsoft.Extensions.Configuration.Json",
+    "Microsoft.Extensions.FileProviders.Abstractions",
+    "Microsoft.Extensions.FileProviders.Physical",
+    "Microsoft.Extensions.FileProviders.FileSystemGlobbing",
+    "Microsoft.Extensions.FileProviders.Primitives",
+    "Newtonsoft.Json",
+    "scriptsettings",
+    "System.Buffers",
+    "System.Management.Automation",
+    "System.Memory",
+    "System.Numerics.Vectors",
+    "System.Runtime.CompilerServices.Unsafe"
+)
+
+Describe 'Import-DLLs' {
+    Context "Integration Tests (black-box testing)" {
+        It "Loads all the DLLs in the 'DLLs' folder" {
+            $dllFolder = "$PSScriptRoot/DLLs"
+
+            Import-DLLs -directory $dllFolder
+
+            foreach($assemblyName in $dllAssemblyNames)
+            {
+                # Check if Assembly is loaded. Modified  but taken from: https://stackoverflow.com/questions/43647107/powershell-check-if-net-class-exists
+                $assembly = [System.AppDomain]::CurrentDomain.GetAssemblies() | ForEach-Object { $_.GetName() | Where-Object { $_.Name -like "$assemblyName"}} | Select-Object -ExpandProperty Name
+
+                Write-Debug "======================================================"
+                Write-Debug "Current Iteration of Assembly List: $assemblyName"
+                Write-Debug "Actual value of search: $assembly"
+                Write-Debug "======================================================"
+                Write-Debug "$([Environment]::NewLine)"
+            }
+        }
+    }
+}

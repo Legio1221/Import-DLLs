@@ -47,7 +47,7 @@ function Import-DLLs
 
     foreach( $file in $directoryContents)
     {
-        if( $file.Name -match '*.dll')
+        if( $file.Name -match '.*.dll')
         {
             $dllArray += $file.FullName
         }
@@ -64,5 +64,3 @@ function Import-DLLs
         Add-Type -Path $dll
     }
 }
-
-Export-ModuleMember -Function "Import-DLLs"
