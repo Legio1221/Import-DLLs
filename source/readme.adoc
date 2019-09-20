@@ -1,0 +1,5 @@
+= Import-DLLs
+:author: Oscar Guillermo Castro Jr.
+:revdate: September 20, 2019
+
+PowerShell's Publish-Module -Path function requires that the directory of the module bear the same name.
