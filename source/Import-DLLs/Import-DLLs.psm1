@@ -5,7 +5,7 @@
     Date: September 15, 2019
     Organization: Jimenez & Associates
     File Name: Import-DLLs.psm1
-    Version: 0.0.1-alpha
+    Version: 0.0.2-alpha
     ======================================================
 
     .SYNOPSIS
@@ -37,17 +37,19 @@ function Import-DLLs
     else
     {
         $directoryContents = Get-ChildItem -Path $directory
+        $directoryContents | Format-Table -Auto | Write-Debug
     }
 
     if($directoryContents.Count -le 0)
     {
-        Write-Error -Message "No DLLs found! Directory - $($directoryContents.DirectoryName)"
+        $emptyDirectoryPath = Convert-Path $directory
+        Write-Error -Message "Empty directory! Directory - $emptyDirectoryPath"
         break
     }
 
     foreach( $file in $directoryContents)
     {
-        if( $file.Name -match '.*.dll')
+        if( $file.Name -match '.*\.dll')
         {
             $dllArray += $file.FullName
         }
